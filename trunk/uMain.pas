@@ -1,5 +1,3 @@
-// 삭제하는 부분에서 서버림
-
 unit uMain;
 
 interface
@@ -350,8 +348,6 @@ begin
           Avg := Avg + CurrSpd;
           AvgCount := AvgCount + 1;
 
-
-
           if LastPercent <> CurrPercent then
           begin
             LastPercent := CurrPercent;
@@ -406,24 +402,6 @@ begin
         SpdStart := Now;
         TotalByteWritten := 0;
       end;
-
-      {CurrOverlapped.hEvent := CreateEvent(nil, FALSE, FALSE, nil);
-      if Verifying and (CurrFileNum <= LastVeriFile) then
-      begin
-        IdleStart := Now;
-
-        ReadFile(CurrFile, ReadBuf[0], WriteUnit, BytesWritten, @CurrOverlapped);
-        dwRes := WaitForSingleObject(CurrOverlapped.hEvent, INFINITE);
-
-        SetFilePointer(CurrFile, -WriteUnit, 0, FILE_CURRENT);
-        ErrorCount := CompareBuffer(VeriBuf[SizeNum mod MaxBufSize], ReadBuf);
-        if ErrorCount <> 0 then
-        begin
-          AddStringAtList(LogFileStream, lSpeed, '데이터 리텐션 에러 : ' + IntToStr(ErrorCount) + '개');
-        end;
-        IdleEnd := Now;
-        SpdStart := SpdStart + (IdleEnd - IdleStart);
-      end;}
 
       CurrWrittenCache := 0;
       WrittenCount := 0;
