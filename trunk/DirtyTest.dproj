@@ -69,6 +69,8 @@
         <DCC_RemoteDebug>true</DCC_RemoteDebug>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_1_Win32)'!=''">
+        <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
+        <VerInfo_Locale>1033</VerInfo_Locale>
         <DCC_RemoteDebug>false</DCC_RemoteDebug>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
@@ -87,10 +89,6 @@
         <DelphiCompile Include="$(MainSource)">
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
-        <DCCReference Include="uMain.pas">
-            <Form>fMain</Form>
-            <FormType>dfm</FormType>
-        </DCCReference>
         <DCCReference Include="SSDInfo\uSSDInfo.pas"/>
         <DCCReference Include="SSDInfo\uSSDVersion.pas"/>
         <DCCReference Include="Modules\uDiskFunctions.pas"/>
@@ -100,6 +98,21 @@
         <DCCReference Include="Modules\uRegFunctions.pas"/>
         <DCCReference Include="Modules\uTrimCommand.pas"/>
         <DCCReference Include="Modules\uMTforDel.pas"/>
+        <DCCReference Include="Forms.Setting.pas">
+            <Form>fSetting</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Classes\Setting.pas"/>
+        <DCCReference Include="Classes\Setting.Getter.pas"/>
+        <DCCReference Include="Forms.Main.pas">
+            <Form>fMain</Form>
+            <FormType>dfm</FormType>
+        </DCCReference>
+        <DCCReference Include="Classes\Tester.Thread.pas"/>
+        <DCCReference Include="Classes\Tester.ToView.pas"/>
+        <DCCReference Include="Classes\Tester.Logger.pas"/>
+        <DCCReference Include="Classes\RandomBuffer.pas"/>
+        <DCCReference Include="Modules\uDatasizeUnit.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -147,9 +160,19 @@
                 <Source>
                     <Source Name="MainSource">DirtyTest.dpr</Source>
                 </Source>
+                <Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dcloffice2k210.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\dclofficexp210.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
+                </Excluded_Packages>
             </Delphi.Personality>
             <Deployment>
                 <DeployFile LocalName="DirtyTest.exe" Configuration="Release" Class="ProjectOutput">
+                    <Platform Name="Win32">
+                        <RemoteName>DirtyTest.exe</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="Win32\Debug\DirtyTest.exe" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>DirtyTest.exe</RemoteName>
                         <Overwrite>true</Overwrite>
