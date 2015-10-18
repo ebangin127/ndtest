@@ -164,7 +164,8 @@ end;
 procedure TfMain.AlignListBoxes;
 begin
   lLastAndCurrentLog.Left := 2;
-  lLastAndCurrentLog.Top := tSelectLogRange.Canvas.TextHeight(tSelectLogRange.Tabs[0]) + 8;
+  lLastAndCurrentLog.Top := tSelectLogRange.Canvas.TextHeight(
+    tSelectLogRange.Tabs[0]) + 8;
   lLastAndCurrentLog.Height := tSelectLogRange.Height -
     tSelectLogRange.Canvas.TextHeight(tSelectLogRange.Tabs[0]) - 12;
   lLastAndCurrentLog.Width := tSelectLogRange.Width - 6;

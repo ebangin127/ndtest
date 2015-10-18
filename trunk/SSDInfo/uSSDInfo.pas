@@ -51,7 +51,7 @@ const
   SerialStart = 10;
   SerialEnd = 19;
   UserSizeStart = 100;
-  UserSizeEnd = 103;
+  UserSizeEnd = 104;
   HPABit = 82;
 
 const
@@ -153,8 +153,8 @@ begin
       UserSize := 0;
       for CurrBuf := UserSizeStart to UserSizeEnd do
       begin
-        UserSize := UserSize + ICBuffer.Buffer[CurrBuf * 2] shl (((CurrBuf - UserSizeStart) * 2) * 8);
-        UserSize := UserSize + ICBuffer.Buffer[CurrBuf * 2 + 1]  shl ((((CurrBuf - UserSizeStart) * 2) + 1) * 8);
+        UserSize := UserSize + ICBuffer.Buffer[CurrBuf * 2] shl UInt64(((CurrBuf - UserSizeStart) * 2) * 8);
+        UserSize := UserSize + ICBuffer.Buffer[CurrBuf * 2 + 1]  shl UInt64((((CurrBuf - UserSizeStart) * 2) + 1) * 8);
       end;
     end;
     CloseHandle(hdrive);
@@ -162,6 +162,13 @@ begin
 end;
 
 procedure TSSDInfo.GetInfoSCSI;
+const
+  SCSIModelStart = 8;
+  SCSIModelEnd = 31;
+  SCSIFirmwareStart = 32;
+  SCSIFirmwareEnd = 35;
+  SCSISerialStart = 36;
+  SCSISerialEnd = 43;
 var
   hdrive: Cardinal;
   dwBytesReturned: DWORD;
@@ -179,11 +186,11 @@ begin
 	ICBuffer.spt.TimeOutValue := 2;
 	ICBuffer.spt.DataBufferOffset := pansichar(@ICBuffer.Buffer)-pansichar(@ICBuffer);
 	ICBuffer.spt.SenseInfoOffset  := pansichar(@ICBuffer.SenseBuf)-pansichar(@ICBuffer);
-  ICBuffer.spt.Cdb[0] := $A1;
-  ICBuffer.spt.Cdb[1] := $8;
-  ICBuffer.spt.Cdb[2] := $E;
-  ICBuffer.spt.Cdb[4] := $1;
-	ICBuffer.spt.Cdb[9] := $EC;
+  ICBuffer.spt.Cdb[0] := $12;
+  ICBuffer.spt.Cdb[1] := $0;
+  ICBuffer.spt.Cdb[2] := $0;
+  ICBuffer.spt.Cdb[4] := $60;
+	ICBuffer.spt.Cdb[9] := $0;
 
   hdrive := CreateFile(PChar(DeviceName), GENERIC_READ or GENERIC_WRITE,
                     FILE_SHARE_READ or FILE_SHARE_WRITE, nil, OPEN_EXISTING, 0, 0);
@@ -193,27 +200,17 @@ begin
     Status := DeviceIoControl(hdrive, IOCTL_SCSI_PASS_THROUGH, @ICBuffer, SizeOf(ICBuffer), @ICBuffer, SizeOf(ICBuffer), dwBytesReturned, nil);
     if status and (GetLastError = 0) and (ICBuffer.SenseBuf[0] = 0) then
     begin
-      for CurrBuf := ModelStart to ModelEnd do
-        Model := Model + Chr(ICBuffer.Buffer[CurrBuf * 2 + 1]) +
-                         Chr(ICBuffer.Buffer[CurrBuf * 2]);
+      for CurrBuf := SCSIModelStart to SCSIModelEnd do
+        Model := Model + Chr(ICBuffer.Buffer[CurrBuf]);
       Model := Trim(Model);
 
-      for CurrBuf := FirmStart to FirmEnd do
-        Firmware := Firmware + Chr(ICBuffer.Buffer[CurrBuf * 2 + 1]) +
-                               Chr(ICBuffer.Buffer[CurrBuf * 2]);
+      for CurrBuf := SCSIFirmwareStart to SCSIFirmwareEnd do
+        Firmware := Firmware + Chr(ICBuffer.Buffer[CurrBuf]);
       Firmware := Trim(Firmware);
 
-      for CurrBuf := SerialStart to SerialEnd do
-        Serial := Serial + Chr(ICBuffer.Buffer[CurrBuf * 2 + 1]) +
-                           Chr(ICBuffer.Buffer[CurrBuf * 2]);
+      for CurrBuf := SCSISerialStart to SCSISerialEnd do
+        Serial := Serial + Chr(ICBuffer.Buffer[CurrBuf]);
       Serial := Trim(Serial);
-
-      UserSize := 0;
-      for CurrBuf := UserSizeStart to UserSizeEnd do
-      begin
-        UserSize := UserSize + ICBuffer.Buffer[CurrBuf * 2] shl (((CurrBuf - UserSizeStart) * 2) * 8);
-        UserSize := UserSize + ICBuffer.Buffer[CurrBuf * 2 + 1]  shl ((((CurrBuf - UserSizeStart) * 2) + 1) * 8);
-      end;
     end;
     CloseHandle(hdrive);
   end;

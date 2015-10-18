@@ -14,7 +14,7 @@ type
     FLastPercent: Double;
     FLogger: TTesterLogger;
     FDiskSizeInMiB: Integer;
-    FOriginalFilledSpaceInMiB: Integer;
+    FOriginalFilledSpaceInMiB: Int64;
     FMaxSpeed, FMinSpeed: Integer;
     FSumSpeed: UInt64;
     FCount: Integer;
@@ -40,7 +40,7 @@ type
     procedure PrintInitialSetting(const TestCount: Integer;
       const FreeSizeInByte, TotalSizeInByte, ToFillInByte: Int64);
     procedure ApplyProgress(
-      const RemainToFillInMiB, NeedToFillInMiB, SpeedInMiB: Integer);
+      const HostWriteInMiB, NeedToFillInMiB, SpeedInMiB: Integer);
     procedure EndTest(const TestStartTime: TDateTime = 0;
       const TestHostWriteInMiB: UInt64 = 0);
     procedure HideButtons;
@@ -73,19 +73,17 @@ begin
 end;
 
 procedure TTesterToView.ApplyProgress(
-  const RemainToFillInMiB, NeedToFillInMiB, SpeedInMiB: Integer);
+  const HostWriteInMiB, NeedToFillInMiB, SpeedInMiB: Integer);
 var
-  FilledInMiB: Integer;
   FilledPercentInTest: Integer;
   FilledPercentInDrive: Double;
 begin
-  FilledInMiB := NeedToFillInMiB - RemainToFillInMiB;
-  FilledPercentInTest := round((FilledInMiB / NeedToFillInMiB) * 100);
-  FilledPercentInDrive := GetFilledPercentInDrive(FilledInMiB);
-  RefreshProgressAndLabel(FilledInMiB, NeedToFillInMiB, FilledPercentInTest);
+  FilledPercentInTest := round((HostWriteInMiB / NeedToFillInMiB) * 100);
+  FilledPercentInDrive := GetFilledPercentInDrive(HostWriteInMiB);
+  RefreshProgressAndLabel(HostWriteInMiB, NeedToFillInMiB, FilledPercentInTest);
   FSpeedList.Add(SpeedInMiB);
   AddToChart(
-    round(((FDiskSizeInMiB - (FOriginalFilledSpaceInMiB + FilledInMiB)) /
+    round(((FDiskSizeInMiB - (FOriginalFilledSpaceInMiB + HostWriteInMiB)) /
       FDiskSizeInMiB) * 10000) / 100, SpeedInMiB);
   RefreshSpeedStatus(SpeedInMiB);
   if FLastPercent <> FilledPercentInDrive then
@@ -141,20 +139,23 @@ procedure TTesterToView.PrintInitialSetting(const TestCount: Integer;
   const FreeSizeInByte, TotalSizeInByte, ToFillInByte: Int64);
 var
   SSDInfo: TSSDInfo;
+  MotherDriveInString: String;
 begin
   InitializeSpeed;
   DeleteLastLog;
   SSDInfo := TSSDInfo.Create;
   SSDInfo.ATAorSCSI := DetermineModel;
   SSDInfo.UsedByService := true;
-  SSDInfo.SetDeviceName('PhysicalDrive' +
-    IntToStr(GetMotherDrive(FTestSetting.DrivePath).Extents[0].DiskNumber));
-  FDiskSizeInMiB := round(SSDInfo.UserSize / 2 / 1024);
+  MotherDriveInString :=
+    IntToStr(GetMotherDrive(Copy(FTestSetting.DrivePath, 1, 2)).Extents[0].
+      DiskNumber);
+  SSDInfo.SetDeviceName('PhysicalDrive' + MotherDriveInString);
+  FDiskSizeInMiB := GetDiskSize(MotherDriveInString) shr 20;
   FOriginalFilledSpaceInMiB := FDiskSizeInMiB - (FreeSizeInByte shr 20);
   ClearSpeedSeries;
   FStartTime := now;
   AddStringAtList('***************************************');
-  AddStringAtList('나래온 더티 테스트 6.0.0');
+  AddStringAtList('나래온 더티 테스트 6.0.2');
   AddStringAtList('제작자 : 이방인');
   AddStringAtList('테스트 일시 : ' +
     FormatDateTime('yyyy/mm/dd hh:mm', FStartTime));
@@ -164,8 +165,7 @@ begin
   AddStringAtList('모델명 : ' + SSDInfo.Model);
   AddStringAtList('드라이브 : ' + FTestSetting.DrivePath);
   AddStringAtList('전체 용량 : ' +
-    IntToStr(round(
-      SSDInfo.UserSize / 2 / 1024 / 1000 / 1000 * 1024 * 1.024)) + 'GB');
+    IntToStr(round(FDiskSizeInMiB * 1.024 * 1.024 / 1000)) + 'GB');
   AddStringAtList('');
   AddStringAtList('- 드라이브 내 테스트 구간 -');
   AddStringAtList('테스트 구간 : ' +

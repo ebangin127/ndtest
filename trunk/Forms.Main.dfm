@@ -1,7 +1,7 @@
 object fMain: TfMain
   Left = 0
   Top = 0
-  Caption = #45208#47000#50728' '#45908#54000' '#53580#49828#53944' 6.0.0'
+  Caption = #45208#47000#50728' '#45908#54000' '#53580#49828#53944' 6.0.2'
   ClientHeight = 973
   ClientWidth = 1391
   Color = clBtnFace
@@ -90,6 +90,7 @@ object fMain: TfMain
     LeftAxis.Title.Caption = #49549#46020' (MiB/s)'
     View3D = False
     View3DOptions.Orthogonal = False
+    Zoom.MouseWheel = pmwNormal
     TabOrder = 3
     DefaultCanvas = 'TGDIPlusCanvas'
     ColorPaletteIndex = 13
@@ -109,7 +110,7 @@ object fMain: TfMain
     end
   end
   object tSelectLogRange: TTabControl
-    Left = 8
+    Left = 10
     Top = 479
     Width = 1374
     Height = 486

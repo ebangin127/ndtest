@@ -173,15 +173,17 @@ var
   RemainToFillInMiB: Integer;
   Latency: Double;
   BufferLengthInMiB: Integer;
+  PinnedNeedToFillInMiB: Integer;
 begin
   HostWriteInMiB := 0;
   RemainToFillInMiB := FNeedToFillInMiB;
   BufferLengthInMiB := FRandomBuffer.GetLength shr 20;
+  PinnedNeedToFillInMiB := FNeedToFillInMiB;
   while RemainToFillInMiB > BufferLengthInMiB do
   begin
     ChangeFileHandlePer4GiB(HostWriteInMiB);
     Latency := WriteAndReturnLatency;
-    FToView.ApplyProgress(RemainToFillInMiB, FNeedToFillInMiB,
+    FToView.ApplyProgress(HostWriteInMiB, PinnedNeedToFillInMiB,
       round((FRandomBuffer.GetLength shr 20) / Latency));
     Dec(RemainToFillInMiB, FRandomBuffer.GetLength shr 20);
     Inc(HostWriteInMiB, FRandomBuffer.GetLength shr 20);
@@ -223,7 +225,7 @@ var
   FreeSizeInByte, TotalSizeInByte: Int64;
   DriveNamePChar: PChar;
 begin
-  DriveNamePChar := PChar(FTestSetting.DrivePath);
+  DriveNamePChar := PChar(Copy(FTestSetting.DrivePath, 1, 2));
   GetDiskFreeSpaceEx(DriveNamePChar, FreeSizeInByte, TotalSizeInByte, nil);
 
   FreeSizeInMiB := floor(FreeSizeInByte / 1024 / 1024);
