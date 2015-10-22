@@ -20,6 +20,7 @@ type
     FCurrentTestCount: Integer;
     FTestStartTime: TDateTime;
     FTestHostWriteInMiB: UInt64;
+    procedure PrepareTesterThread;
     function BuildFileName(const FileNumber: Integer): String;
     function NeedDelete: Boolean;
     procedure Test;
@@ -72,17 +73,9 @@ begin
 end;
 
 procedure TTesterThread.Execute;
-const
-  BufferSize = 8192;
-  CompleteRandom = 100;
 begin
   inherited;
-  FRandomBuffer.CreateBuffer(BufferSize);
-  FRandomBuffer.FillBuffer(CompleteRandom);
-  QueryPerformanceFrequency(FFrequency);
-  FCurrentTestCount := 1;
-  FTestStartTime := now;
-  FTestHostWriteInMiB := 0;
+  PrepareTesterThread;
   try
     repeat
       SetupTest;
@@ -96,6 +89,19 @@ begin
       raise;
   end;
   EndTesterThread;
+end;
+
+procedure TTesterThread.PrepareTesterThread;
+const
+  BufferSize = 8192;
+  CompleteRandom = 100;
+begin
+  FRandomBuffer.CreateBuffer(BufferSize);
+  FRandomBuffer.FillBuffer(CompleteRandom);
+  QueryPerformanceFrequency(FFrequency);
+  FCurrentTestCount := 1;
+  FTestStartTime := now;
+  FTestHostWriteInMiB := 0;
 end;
 
 procedure TTesterThread.EndTesterThread;
