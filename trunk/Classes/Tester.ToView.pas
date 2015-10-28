@@ -13,6 +13,7 @@ type
     FTestSetting: TSetting;
     FLastPercent: Double;
     FLogger: TTesterLogger;
+    FDetailedLogger: TTesterLogger;
     FDiskSizeInMiB: Integer;
     FOriginalFilledSpaceInMiB: Int64;
     FMaxSpeed, FMinSpeed: Integer;
@@ -33,6 +34,8 @@ type
       const SpeedInMiB: Integer);
     function GetFilledPercentInDrive(const FilledInMiB: Integer): Double;
     function GetSlowPercent: Double;
+    function GetHalfOfAverageSpeed: Integer;
+    procedure RefreshHorizontalLine(const IsEnd: Boolean);
   public
     constructor Create(const TestSetting: TSetting);
     destructor Destroy; override;
@@ -82,12 +85,33 @@ begin
   FilledPercentInDrive := GetFilledPercentInDrive(HostWriteInMiB);
   RefreshProgressAndLabel(HostWriteInMiB, NeedToFillInMiB, FilledPercentInTest);
   FSpeedList.Add(SpeedInMiB);
+  if FDetailedLogger <> nil then
+    FDetailedLogger.Add(
+      FloatToStr((FDiskSizeInMiB -
+        (FOriginalFilledSpaceInMiB + HostWriteInMiB)) /
+        FDiskSizeInMiB * 100) + ',' + IntToStr(SpeedInMiB));
   AddToChart(
     round(((FDiskSizeInMiB - (FOriginalFilledSpaceInMiB + HostWriteInMiB)) /
       FDiskSizeInMiB) * 10000) / 100, SpeedInMiB);
   RefreshSpeedStatus(SpeedInMiB);
+  RefreshHorizontalLine(false);
   if FLastPercent <> FilledPercentInDrive then
     RefreshSpeed(FilledPercentInDrive, SpeedInMiB);
+end;
+
+procedure TTesterToView.RefreshHorizontalLine(const IsEnd: Boolean);
+begin
+  TThread.Queue(TThread.CurrentThread, procedure
+  begin
+    if (fMain.FSpeedSeries.GetHorizAxis.Minimum = 0) or (IsEnd) then
+      fMain.FSpeedSeries.GetHorizAxis.AdjustMaxMin;
+    fMain.FHorizontalLine.Y0 := GetHalfOfAverageSpeed;
+    fMain.FHorizontalLine.Y1 := fMain.FHorizontalLine.Y0;
+    fMain.FHorizontalLine.X0 := fMain.FSpeedSeries.GetHorizAxis.Minimum;
+    fMain.FHorizontalLine.X1 := fMain.FSpeedSeries.GetHorizAxis.Maximum;
+    if not fMain.FHorizontalLine.Active then
+      fMain.FHorizontalLine.Active := true;
+  end);
 end;
 
 procedure TTesterToView.RefreshSpeedStatus(const SpeedInMiB: Integer);
@@ -105,13 +129,18 @@ begin
   FTestSetting := TestSetting;
   FSpeedList := TList<Integer>.Create;
   if FTestSetting.RecordPath <> '' then
+  begin
     FLogger := TTesterLogger.Create(FTestSetting.RecordPath);
+    if FTestSetting.DetailedRecordPath <> '' then
+      FDetailedLogger := TTesterLogger.Create(FTestSetting.DetailedRecordPath);
+  end;
 end;
 
 destructor TTesterToView.Destroy;
 begin
   FLogger.Free;
   FSpeedList.Free;
+  FDetailedLogger.Free;
   inherited;
 end;
 
@@ -155,7 +184,7 @@ begin
   ClearSpeedSeries;
   FStartTime := now;
   AddStringAtList('***************************************');
-  AddStringAtList('나래온 더티 테스트 6.0.2');
+  AddStringAtList('나래온 더티 테스트 6.0.3');
   AddStringAtList('제작자 : 이방인');
   AddStringAtList('테스트 일시 : ' +
     FormatDateTime('yyyy/mm/dd hh:mm', FStartTime));
@@ -208,13 +237,15 @@ var
   HalfOfAverage: Integer;
   ResultInCount: Integer;
 begin
-  HalfOfAverage := (FSumSpeed div FCount) shr 1;
+  HalfOfAverage := GetHalfOfAverageSpeed;
   ResultInCount := 0;
   TParallel.For(0, FSpeedList.Count - 1, procedure (CurrentIndex: Integer)
   begin
     if FSpeedList[CurrentIndex] <= HalfOfAverage then
       TInterlocked.Increment(ResultInCount);
   end);
+  if FCount = 0 then
+    exit(0);
   result := ResultInCount / FCount * 100;
 end;
 
@@ -228,6 +259,8 @@ const
   OneDayInSecond = 86400;
 begin
   SlowPercent := GetSlowPercent;
+  if FCount = 0 then
+    exit;
   TThread.Synchronize(TThread.CurrentThread, procedure
   var
     EndTime: TDateTime;
@@ -235,6 +268,8 @@ begin
     OverallTestDay: Integer;
     OverallTestBelowDay: TDateTime;
   begin
+    RefreshHorizontalLine(true);
+    HideButtons;
     EndTime := now;
     AddStringAtList('***************************************');
     AddStringAtList('종료 시간 : ' +
@@ -273,6 +308,13 @@ begin
     fMain.bIdle.Visible := false;
     fMain.bCancel.Visible := false;
   end);
+end;
+
+function TTesterToView.GetHalfOfAverageSpeed: Integer;
+begin
+  if FCount = 0 then
+    exit(0);
+  result := (FSumSpeed div FCount) shr 1;
 end;
 
 function TTesterToView.GetFilledPercentInDrive(const FilledInMiB: Integer):

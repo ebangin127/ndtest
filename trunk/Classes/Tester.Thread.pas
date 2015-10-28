@@ -189,10 +189,10 @@ begin
   begin
     ChangeFileHandlePer4GiB(HostWriteInMiB);
     Latency := WriteAndReturnLatency;
-    FToView.ApplyProgress(HostWriteInMiB, PinnedNeedToFillInMiB,
-      round((FRandomBuffer.GetLength shr 20) / Latency));
     Dec(RemainToFillInMiB, FRandomBuffer.GetLength shr 20);
     Inc(HostWriteInMiB, FRandomBuffer.GetLength shr 20);
+    FToView.ApplyProgress(HostWriteInMiB, PinnedNeedToFillInMiB,
+      round((FRandomBuffer.GetLength shr 20) / Latency));
     if FIdle then
       WaitForIdleEnd;
     if Terminated then

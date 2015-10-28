@@ -47,6 +47,7 @@ begin
   result.InfiniteRepetition := fSetting.cRepeat.Checked;
   result.NeedDelete := fSetting.cDelete.Checked;
   result.RecordPath := fSetting.RecordPath;
+  result.DetailedRecordPath := fSetting.DetailedRecordPath;
 end;
 
 end.

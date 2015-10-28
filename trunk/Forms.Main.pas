@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Classes, Vcl.Forms,
   Vcl.Dialogs, Vcl.StdCtrls, Vcl.ComCtrls, Vcl.Controls, VclTee.TeeGDIPlus,
   VCLTee.TeEngine, Vcl.ExtCtrls, VCLTee.TeeProcs, VCLTee.Chart, VCLTee.Series,
-  Math,
+  VCLTee.TeeShape, Math,
   Forms.Setting, Setting, Setting.Getter, Tester.Thread;
 
 const
@@ -20,10 +20,11 @@ type
     bIdle: TButton;
     bCancel: TButton;
     cLog: TChart;
-    FSpeedSeries: TLineSeries;
     tSelectLogRange: TTabControl;
     lCurrentLog: TListBox;
     lLastAndCurrentLog: TListBox;
+    FSpeedSeries: TFastLineSeries;
+    FHorizontalLine: TChartShape;
     procedure FormCreate(Sender: TObject);
     procedure bIdleClick(Sender: TObject);
     procedure FormClose(Sender: TObject; var Action: TCloseAction);
@@ -112,6 +113,8 @@ procedure TfMain.FormCreate(Sender: TObject);
 begin
   ReportMemoryLeaksOnShutdown := true;
   PostMessage(Self.Handle, WM_AFTER_CREATE, 0, 0);
+  FSpeedSeries.LegendTitle := '구간 속도';
+  FHorizontalLine.LegendTitle := '평균 속도 50%';
 end;
 
 procedure TfMain.AlignTopGroup;
@@ -165,9 +168,9 @@ procedure TfMain.AlignListBoxes;
 begin
   lLastAndCurrentLog.Left := 2;
   lLastAndCurrentLog.Top := tSelectLogRange.Canvas.TextHeight(
-    tSelectLogRange.Tabs[0]) + 8;
+    tSelectLogRange.Tabs[0]) + 12;
   lLastAndCurrentLog.Height := tSelectLogRange.Height -
-    tSelectLogRange.Canvas.TextHeight(tSelectLogRange.Tabs[0]) - 12;
+    lLastAndCurrentLog.Top - 2;
   lLastAndCurrentLog.Width := tSelectLogRange.Width - 6;
   lCurrentLog.Left := lLastAndCurrentLog.Left;
   lCurrentLog.Top := lLastAndCurrentLog.Top;

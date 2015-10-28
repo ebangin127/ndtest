@@ -3,7 +3,7 @@ object fSetting: TfSetting
   Top = 0
   BorderIcons = [biSystemMenu, biMinimize]
   Caption = #49444#51221
-  ClientHeight = 313
+  ClientHeight = 343
   ClientWidth = 369
   Color = clBtnFace
   Font.Charset = ANSI_CHARSET
@@ -164,7 +164,7 @@ object fSetting: TfSetting
   end
   object bStart: TButton
     Left = 16
-    Top = 263
+    Top = 296
     Width = 342
     Height = 36
     Margins.Left = 4
@@ -188,6 +188,18 @@ object fSetting: TfSetting
     Checked = True
     State = cbChecked
     TabOrder = 7
+  end
+  object cDetailedRecord: TCheckBox
+    Left = 16
+    Top = 261
+    Width = 278
+    Height = 23
+    Margins.Left = 4
+    Margins.Top = 4
+    Margins.Right = 4
+    Margins.Bottom = 4
+    Caption = #49345#49464' '#47196#44536' '#51200#51109
+    TabOrder = 8
   end
   object sdText: TSaveDialog
     Filter = 'Text File(*.txt)|*.txt'

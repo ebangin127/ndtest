@@ -15,6 +15,7 @@ type
     InfiniteRepetition: Boolean;
     NeedDelete: Boolean;
     RecordPath: String;
+    DetailedRecordPath: String;
   end;
 
 implementation

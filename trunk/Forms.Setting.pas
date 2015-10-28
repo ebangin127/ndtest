@@ -24,6 +24,7 @@ type
     bStart: TButton;
     sdText: TSaveDialog;
     cDelete: TCheckBox;
+    cDetailedRecord: TCheckBox;
     procedure FormCreate(Sender: TObject);
     procedure eDriveChange(Sender: TObject);
     procedure bStartClick(Sender: TObject);
@@ -31,14 +32,19 @@ type
   private
     FIsSet: Boolean;
     FRecordPath: String;
+    FDetailedRecordPath: String;
     function AllOptionsSet: Boolean;
     function LeftSet: Boolean;
     procedure SetRecordPathAsSelectedFile;
     procedure FixSize;
     procedure GetFixedDrives;
+    procedure GetRecordPath;
+    procedure GetDetailedRecordPath;
+    function GetTextPath: String;
   public
     property IsSet: Boolean read FIsSet;
     property RecordPath: String read FRecordPath;
+    property DetailedRecordPath: String read FDetailedRecordPath;
   end;
 
 var
@@ -59,15 +65,8 @@ end;
 
 procedure TfSetting.SetRecordPathAsSelectedFile;
 begin
-  if sdText.Execute then
-  begin
-    FRecordPath := sdText.FileName;
-    if ExtractFileExt(FRecordPath) = '' then
-    begin
-      if sdText.FilterIndex = 1 then
-        FRecordPath := FRecordPath + '.txt';
-    end;
-  end;
+  GetRecordPath;
+  GetDetailedRecordPath;
 end;
 
 procedure TfSetting.FixSize;
@@ -89,6 +88,35 @@ begin
     eDrive.Items.Add(Drives.Letters[CurrDrv]);
   eDrive.ItemIndex := 0;
   eDriveChange(eDrive);
+end;
+
+procedure TfSetting.GetRecordPath;
+begin
+  sdText.Title := '로그 저장 위치';
+  FRecordPath := GetTextPath;
+end;
+
+procedure TfSetting.GetDetailedRecordPath;
+begin
+  if (FRecordPath <> '') and (cDetailedRecord.Checked) then
+  begin
+    sdText.Title := '상세 로그 저장 위치';
+    FDetailedRecordPath := GetTextPath;
+  end;
+end;
+
+function TfSetting.GetTextPath: String;
+begin
+  result := '';
+  if sdText.Execute then
+  begin
+    result := sdText.FileName;
+    if ExtractFileExt(result) = '' then
+    begin
+      if sdText.FilterIndex = 1 then
+        result := result + '.txt';
+    end;
+  end;
 end;
 
 function TfSetting.AllOptionsSet: Boolean;
