@@ -1,4 +1,4 @@
-unit Tester.ToView;
+ï»¿unit Tester.ToView;
 
 interface
 
@@ -29,13 +29,14 @@ type
     procedure AddToChart(const FilledPercentInDriveChart: Double;
       const SpeedInMiB: Integer);
     procedure RefreshProgressAndLabel(const FilledInMiB: Integer;
-      const NeedToFillInMiB: Integer; FilledPercentInTest: Integer);
+      const NeedToFillInMiB, FilledPercentInTest: Integer);
     procedure RefreshSpeed(const FilledPercentInDrive: Double;
       const SpeedInMiB: Integer);
     function GetFilledPercentInDrive(const FilledInMiB: Integer): Double;
     function GetSlowPercent: Double;
     function GetHalfOfAverageSpeed: Integer;
     procedure RefreshHorizontalLine(const IsEnd: Boolean);
+    function EnoughDelta(const CurrentPercent, LastPercent: Double): Boolean;
   public
     constructor Create(const TestSetting: TSetting);
     destructor Destroy; override;
@@ -75,6 +76,15 @@ begin
   Inc(FLastLogCount);
 end;
 
+function TTesterToView.EnoughDelta(
+  const CurrentPercent, LastPercent: Double): Boolean;
+begin
+  if FTestSetting.UnitSpeed = TUnitSpeed.TenPercent then
+    result := Abs(CurrentPercent - LastPercent) >= 10
+  else
+    result := LastPercent <> CurrentPercent;
+end;
+
 procedure TTesterToView.ApplyProgress(
   const HostWriteInMiB, NeedToFillInMiB, SpeedInMiB: Integer);
 var
@@ -95,7 +105,7 @@ begin
       FDiskSizeInMiB) * 10000) / 100, SpeedInMiB);
   RefreshSpeedStatus(SpeedInMiB);
   RefreshHorizontalLine(false);
-  if FLastPercent <> FilledPercentInDrive then
+  if EnoughDelta(FLastPercent, FilledPercentInDrive) then
     RefreshSpeed(FilledPercentInDrive, SpeedInMiB);
 end;
 
@@ -129,11 +139,9 @@ begin
   FTestSetting := TestSetting;
   FSpeedList := TList<Integer>.Create;
   if FTestSetting.RecordPath <> '' then
-  begin
     FLogger := TTesterLogger.Create(FTestSetting.RecordPath);
-    if FTestSetting.DetailedRecordPath <> '' then
-      FDetailedLogger := TTesterLogger.Create(FTestSetting.DetailedRecordPath);
-  end;
+  if FTestSetting.DetailedRecordPath <> '' then
+    FDetailedLogger := TTesterLogger.Create(FTestSetting.DetailedRecordPath);
 end;
 
 destructor TTesterToView.Destroy;
@@ -184,38 +192,38 @@ begin
   ClearSpeedSeries;
   FStartTime := now;
   AddStringAtList('***************************************');
-  AddStringAtList('³ª·¡¿Â ´õÆ¼ Å×½ºÆ® 6.0.3');
-  AddStringAtList('Á¦ÀÛÀÚ : ÀÌ¹æÀÎ');
-  AddStringAtList('Å×½ºÆ® ÀÏ½Ã : ' +
+  AddStringAtList('ë‚˜ë˜ì˜¨ ë”í‹° í…ŒìŠ¤íŠ¸ 6.0.3');
+  AddStringAtList('ì œì‘ì : ì´ë°©ì¸');
+  AddStringAtList('í…ŒìŠ¤íŠ¸ ì¼ì‹œ : ' +
     FormatDateTime('yyyy/mm/dd hh:mm', FStartTime));
-  AddStringAtList('Å×½ºÆ® È¸Â÷ : ' + IntToStr(TestCount));
+  AddStringAtList('í…ŒìŠ¤íŠ¸ íšŒì°¨ : ' + IntToStr(TestCount));
   AddStringAtList('***************************************');
-  AddStringAtList('- Å×½ºÆ® µå¶óÀÌºê »ó¼¼ -');
-  AddStringAtList('¸ğµ¨¸í : ' + SSDInfo.Model);
-  AddStringAtList('µå¶óÀÌºê : ' + FTestSetting.DrivePath);
-  AddStringAtList('ÀüÃ¼ ¿ë·® : ' +
+  AddStringAtList('- í…ŒìŠ¤íŠ¸ ë“œë¼ì´ë¸Œ ìƒì„¸ -');
+  AddStringAtList('ëª¨ë¸ëª… : ' + SSDInfo.Model);
+  AddStringAtList('ë“œë¼ì´ë¸Œ : ' + FTestSetting.DrivePath);
+  AddStringAtList('ì „ì²´ ìš©ëŸ‰ : ' +
     IntToStr(round(FDiskSizeInMiB * 1.024 * 1.024 / 1000)) + 'GB');
   AddStringAtList('');
-  AddStringAtList('- µå¶óÀÌºê ³» Å×½ºÆ® ±¸°£ -');
-  AddStringAtList('Å×½ºÆ® ±¸°£ : ' +
+  AddStringAtList('- ë“œë¼ì´ë¸Œ ë‚´ í…ŒìŠ¤íŠ¸ êµ¬ê°„ -');
+  AddStringAtList('í…ŒìŠ¤íŠ¸ êµ¬ê°„ : ' +
     IntToStr(round(
       FreeSizeInByte / 1000 / 1000 / 1000)) + 'GB ~ ' +
     IntToStr(round((
       (FreeSizeInByte / 1000 / 1000)  -
       (ToFillInByte * 1.024 * 1.024)) / 1000)) + 'GB');
-  AddStringAtList('ÆÄÆ¼¼Ç ¿ë·® : ' +
+  AddStringAtList('íŒŒí‹°ì…˜ ìš©ëŸ‰ : ' +
     IntToStr(round(
       TotalSizeInByte / 1000 / 1000 / 1000)) + 'GB');
   AddStringAtList('');
-  AddStringAtList('- ¸ğµå Àû¿ë »çÇ× -');
+  AddStringAtList('- ëª¨ë“œ ì ìš© ì‚¬í•­ -');
   if FTestSetting.NeedCache then
-    AddStringAtList('À©µµ Ä³½Ã È¿°ú : Àû¿ë')
+    AddStringAtList('ìœˆë„ ìºì‹œ íš¨ê³¼ : ì ìš©')
   else
-    AddStringAtList('À©µµ Ä³½Ã È¿°ú : ¹ÌÀû¿ë');
+    AddStringAtList('ìœˆë„ ìºì‹œ íš¨ê³¼ : ë¯¸ì ìš©');
   if FTestSetting.InfiniteRepetition then
-    AddStringAtList('¹«ÇÑ ¹İº¹ : Àû¿ë')
+    AddStringAtList('ë¬´í•œ ë°˜ë³µ : ì ìš©')
   else
-    AddStringAtList('¹«ÇÑ ¹İº¹ : ¹ÌÀû¿ë');
+    AddStringAtList('ë¬´í•œ ë°˜ë³µ : ë¯¸ì ìš©');
   AddStringAtList('***************************************');
   FreeAndNil(SSDInfo);
 end;
@@ -223,13 +231,13 @@ end;
 procedure TTesterToView.StartIdle;
 begin
   AddStringAtList('- ' + FormatDateTime('yy/mm/dd hh:mm:ss', Now) +
-    '¿¡ ÀÏ½ÃÁ¤Áö ½ÃÀÛ -');
+    'ì— ì¼ì‹œì •ì§€ ì‹œì‘ -');
 end;
 
 procedure TTesterToView.EndIdle;
 begin
   AddStringAtList('- ' + FormatDateTime('yy/mm/dd hh:mm:ss', Now) +
-    '¿¡ ÀÏ½ÃÁ¤Áö Á¾·á -');
+    'ì— ì¼ì‹œì •ì§€ ì¢…ë£Œ -');
 end;
 
 function TTesterToView.GetSlowPercent: Double;
@@ -269,12 +277,11 @@ begin
     OverallTestBelowDay: TDateTime;
   begin
     RefreshHorizontalLine(true);
-    HideButtons;
     EndTime := now;
     AddStringAtList('***************************************');
-    AddStringAtList('Á¾·á ½Ã°£ : ' +
+    AddStringAtList('ì¢…ë£Œ ì‹œê°„ : ' +
       FormatDateTime('yyyy/mm/dd hh:mm', EndTime));
-    AddStringAtList('Å×½ºÆ® ½Ã°£ : ' +
+    AddStringAtList('í…ŒìŠ¤íŠ¸ ì‹œê°„ : ' +
       FormatDateTime('hh:mm:ss', EndTime - FStartTime));
     if TestStartTime > 0 then
     begin
@@ -282,18 +289,18 @@ begin
       OverallTestDay := floor(OverallTestTime / OneDayInSecond);
       OverallTestBelowDay := OverallTestTime -
         (OverallTestDay * OneDayInSecond);
-      AddStringAtList('ÀüÃ¼ Å×½ºÆ® ½Ã°£ : ' + IntToStr(OverallTestDay) +
+      AddStringAtList('ì „ì²´ í…ŒìŠ¤íŠ¸ ì‹œê°„ : ' + IntToStr(OverallTestDay) +
         ':' + FormatDateTime('hh:mm:ss', OverallTestBelowDay));
     end;
     if TestHostWriteInMiB > 0 then
-      AddStringAtList('ÀüÃ¼ È£½ºÆ® ¾²±â : ' +
+      AddStringAtList('ì „ì²´ í˜¸ìŠ¤íŠ¸ ì“°ê¸° : ' +
         FormatSizeInMB(TestHostWriteInMiB, BinaryInteger));
     AddStringAtList('***************************************');
-    AddStringAtList('ÃÖ´ë ¼Óµµ : ' + IntToStr(FMaxSpeed) + 'MiB/s');
-    AddStringAtList('ÃÖ¼Ò ¼Óµµ : ' + IntToStr(FMinSpeed) + 'MiB/s');
-    AddStringAtList('Æò±Õ ¼Óµµ : ' + IntToStr(FSumSpeed div FCount) +
+    AddStringAtList('ìµœëŒ€ ì†ë„ : ' + IntToStr(FMaxSpeed) + 'MiB/s');
+    AddStringAtList('ìµœì†Œ ì†ë„ : ' + IntToStr(FMinSpeed) + 'MiB/s');
+    AddStringAtList('í‰ê·  ì†ë„ : ' + IntToStr(FSumSpeed div FCount) +
       'MiB/s');
-    AddStringAtList('Æò±Õ ¼Óµµ 50% ¹Ì¸¸ ±¸°£ : ' +
+    AddStringAtList('í‰ê·  ì†ë„ 50% ë¯¸ë§Œ êµ¬ê°„ : ' +
       FormatFloat('0.0', SlowPercent) + '%');
     AddStringAtList('***************************************');
   end);
@@ -322,7 +329,8 @@ function TTesterToView.GetFilledPercentInDrive(const FilledInMiB: Integer):
 begin
   result := (FDiskSizeInMiB - (FOriginalFilledSpaceInMiB + FilledInMiB)) /
     FDiskSizeInMiB;
-  if FTestSetting.UnitSpeed = TUnitSpeed.OnePercent then
+  if (FTestSetting.UnitSpeed = TUnitSpeed.TenPercent) or
+     (FTestSetting.UnitSpeed = TUnitSpeed.OnePercent) then
     result := round(result * 100)
   else
     result := round(result * 1000) / 10;
@@ -333,21 +341,21 @@ procedure TTesterToView.RefreshSpeed(const FilledPercentInDrive: Double;
 begin
   FLastPercent := FilledPercentInDrive;
   AddStringAtList(FormatFloat('0.0', FilledPercentInDrive) +
-    '% ¿¡¼­ÀÇ ¼Óµµ : ' + IntToStr(SpeedInMiB) + 'MiB/s');
+    '% ì—ì„œì˜ ì†ë„ : ' + IntToStr(SpeedInMiB) + 'MiB/s');
   TThread.Queue(TThread.CurrentThread, procedure
   begin
-    fMain.lCurrSpd.Caption := '¼Óµµ : ' + IntToStr(SpeedInMiB) + 'MiB/s';
+    fMain.lCurrSpd.Caption := 'ì†ë„ : ' + IntToStr(SpeedInMiB) + 'MiB/s';
   end);
 end;
 
 procedure TTesterToView.RefreshProgressAndLabel(const FilledInMiB: Integer;
-  const NeedToFillInMiB: Integer; FilledPercentInTest: Integer);
+  const NeedToFillInMiB, FilledPercentInTest: Integer);
 begin
   TThread.Queue(TThread.CurrentThread, procedure
   begin
     fMain.pProgress.Position := FilledPercentInTest;
     fMain.lCurrFile.Caption :=
-      'ÇöÀç Ã¤¿öÁø ¿ë·® : ' +
+      'í˜„ì¬ ì±„ì›Œì§„ ìš©ëŸ‰ : ' +
       FormatFloat('0.00', (FilledInMiB / 1024)) + 'GiB / ' +
       FormatFloat('0.00', (NeedToFillInMiB / 1024)) + 'GiB';
   end);

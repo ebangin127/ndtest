@@ -4,7 +4,7 @@ interface
 
 type
   TLeftUnit = (LeaveByGiB, LeaveByMiB, LeaveByPercent);
-  TUnitSpeed = (ZeroPointOnePercent, OnePercent);
+  TUnitSpeed = (ZeroPointOnePercent, OnePercent, TenPercent);
   TSetting = record
     IsSet: Boolean;
     DrivePath: String;

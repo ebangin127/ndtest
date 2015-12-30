@@ -185,7 +185,7 @@ begin
   RemainToFillInMiB := FNeedToFillInMiB;
   BufferLengthInMiB := FRandomBuffer.GetLength shr 20;
   PinnedNeedToFillInMiB := FNeedToFillInMiB;
-  while RemainToFillInMiB > BufferLengthInMiB do
+  while RemainToFillInMiB >= BufferLengthInMiB do
   begin
     ChangeFileHandlePer4GiB(HostWriteInMiB);
     Latency := WriteAndReturnLatency;
@@ -253,6 +253,10 @@ begin
   else
     result := -1;
   end;
+
+  if result > -1 then
+    result := floor(result / (FRandomBuffer.GetLength shr 20)) *
+      (FRandomBuffer.GetLength shr 20);
   FToView.PrintInitialSetting(FCurrentTestCount,
     FreeSizeInByte, TotalSizeInByte, result);
 end;
@@ -267,7 +271,10 @@ begin
   if FTestSetting.InfiniteRepetition then
     FToView.EndTest(FTestStartTime, FTestHostWriteInMiB)
   else
+  begin
     FToView.EndTest;
+    FToView.HideButtons;
+  end;
   Inc(FCurrentTestCount);
 end;
 

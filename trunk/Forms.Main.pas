@@ -1,4 +1,4 @@
-unit Forms.Main;
+ï»¿unit Forms.Main;
 
 interface
 
@@ -87,10 +87,10 @@ end;
 procedure TfMain.bIdleClick(Sender: TObject);
 begin
   FTesterThread.ToggleIdle;
-  if bIdle.Caption = 'ÀÏ½ÃÁ¤Áö' then
-    bIdle.Caption := 'Àç°³'
+  if bIdle.Caption = 'ì¼ì‹œì •ì§€' then
+    bIdle.Caption := 'ì¬ê°œ'
   else
-    bIdle.Caption := 'ÀÏ½ÃÁ¤Áö';
+    bIdle.Caption := 'ì¼ì‹œì •ì§€';
 end;
 
 procedure TfMain.EndTest;
@@ -113,8 +113,8 @@ procedure TfMain.FormCreate(Sender: TObject);
 begin
   ReportMemoryLeaksOnShutdown := true;
   PostMessage(Self.Handle, WM_AFTER_CREATE, 0, 0);
-  FSpeedSeries.LegendTitle := '±¸°£ ¼Óµµ';
-  FHorizontalLine.LegendTitle := 'Æò±Õ ¼Óµµ 50%';
+  FSpeedSeries.LegendTitle := 'êµ¬ê°„ ì†ë„';
+  FHorizontalLine.LegendTitle := 'í‰ê·  ì†ë„ 50%';
 end;
 
 procedure TfMain.AlignTopGroup;

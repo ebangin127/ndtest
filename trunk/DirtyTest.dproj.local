@@ -1,39 +1,39 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <BorlandProject>
 	<Transactions>
-    <Transaction>1899-12-30 00:00:00.000.070,=E:\UnivProject\DirtyTester\trunk\Unit1.pas</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.862,=E:\UnivProject\DirtyTester\trunk\Unit1.pas</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.148,=E:\UnivProject\DirtyTester\trunk\Unit1.pas</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.228,=E:\UnivProject\DirtyTester\trunk\Unit1.pas</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.664,=E:\UnivProject\DirtyTester\trunk\Unit1.pas</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.405,E:\UnivProject\DirtyTester\trunk\Forms.Main.pas=E:\UnivProject\DirtyTester\trunk\uMain.pas</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.420,=E:\UnivProject\DirtyTester\trunk\Unit1.pas</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.924,=E:\UnivProject\DirtyTester\trunk\Unit1.pas</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.387,E:\UnivProject\DirtyTester\trunk\Unit1.pas=E:\UnivProject\DirtyTester\trunk\Classes\Setting.Getter.pas</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.402,D:\내 작업들\SSDTools\Incubator\DirtyMaker\Extern\btypes.pas=</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.404,D:\내 작업들\SSDTools\Incubator\DirtyMaker\Extern\sha1.pas=</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.092,E:\UnivProject\DirtyTester\trunk\Forms.Setting.dfm=E:\UnivProject\DirtyTester\trunk\Unit1.dfm</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.662,E:\UnivProject\DirtyTester\DirtyMaker.dproj=E:\UnivProject\DirtyTester\DirtyTest.dproj</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.223,=E:\UnivProject\DirtyTester\trunk\Unit1.pas</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.828,E:\UnivProject\DirtyTester\trunk\Unit1.pas=E:\UnivProject\DirtyTester\trunk\Classes\Setting.pas</Transaction>
     <Transaction>1899-12-30 00:00:00.000.377,=E:\UnivProject\DirtyTester\trunk\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.924,=E:\UnivProject\DirtyTester\trunk\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.816,E:\UnivProject\DirtyTester\trunk\Unit1.pas=E:\UnivProject\DirtyTester\trunk\Classes\Tester.ToView.pas</Transaction>
     <Transaction>1899-12-30 00:00:00.000.954,=E:\UnivProject\DirtyTester\trunk\Unit1.pas</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.728,E:\UnivProject\DirtyTester\trunk\Forms.Main.dfm=E:\UnivProject\DirtyTester\trunk\Unit1.dfm</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.405,E:\UnivProject\DirtyTester\trunk\Forms.Main.dfm=E:\UnivProject\DirtyTester\trunk\uMain.dfm</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.816,E:\UnivProject\DirtyTester\trunk\Classes\Tester.ToView.pas=E:\UnivProject\DirtyTester\trunk\Unit1.pas</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.061,E:\UnivProject\DirtyTester\trunk\Classes\RandomBuffer.pas=E:\UnivProject\DirtyTester\trunk\Unit1.pas</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.852,E:\UnivProject\DirtyTester\trunk\Classes\Tester.Logger.pas=E:\UnivProject\DirtyTester\trunk\Unit1.pas</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.403,D:\내 작업들\SSDTools\Incubator\DirtyMaker\Extern\hash.pas=</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.287,E:\UnivProject\DirtyTester\trunk\Classes\Tester.pas=</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.587,E:\UnivProject\DirtyTester\trunk\Classes\Tester.pas=E:\UnivProject\DirtyTester\trunk\Unit1.pas</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.092,E:\UnivProject\DirtyTester\trunk\Forms.Setting.pas=E:\UnivProject\DirtyTester\trunk\Unit1.pas</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.253,E:\UnivProject\DirtyTester\trunk\Classes\Tester.Thread.pas=E:\UnivProject\DirtyTester\trunk\Unit1.pas</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.903,D:\내 작업들\SSDTools\Incubator\DirtyMaker\uAutoTrimThread.pas=</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.728,E:\UnivProject\DirtyTester\trunk\Forms.Main.pas=E:\UnivProject\DirtyTester\trunk\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.664,=E:\UnivProject\DirtyTester\trunk\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.070,=E:\UnivProject\DirtyTester\trunk\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.228,=E:\UnivProject\DirtyTester\trunk\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.420,=E:\UnivProject\DirtyTester\trunk\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.061,E:\UnivProject\DirtyTester\trunk\Unit1.pas=E:\UnivProject\DirtyTester\trunk\Classes\RandomBuffer.pas</Transaction>
     <Transaction>1899-12-30 00:00:00.000.551,E:\UnivProject\DirtyTester\trunk\Forms.Main.pas=</Transaction>
-    <Transaction>1899-12-30 00:00:00.000.756,D:\내 작업들\SSDTools\Incubator\DirtyMaker\uTrimThread.pas=</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.728,E:\UnivProject\DirtyTester\trunk\Unit1.pas=E:\UnivProject\DirtyTester\trunk\Forms.Main.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.405,E:\UnivProject\DirtyTester\trunk\uMain.pas=E:\UnivProject\DirtyTester\trunk\Forms.Main.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.402,D:\내 작업들\SSDTools\Incubator\DirtyMaker\Extern\btypes.pas=</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.852,E:\UnivProject\DirtyTester\trunk\Unit1.pas=E:\UnivProject\DirtyTester\trunk\Classes\Tester.Logger.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.587,E:\UnivProject\DirtyTester\trunk\Unit1.pas=E:\UnivProject\DirtyTester\trunk\Classes\Tester.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.253,E:\UnivProject\DirtyTester\trunk\Unit1.pas=E:\UnivProject\DirtyTester\trunk\Classes\Tester.Thread.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.092,E:\UnivProject\DirtyTester\trunk\Unit1.pas=E:\UnivProject\DirtyTester\trunk\Forms.Setting.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.662,E:\UnivProject\DirtyTester\DirtyTest.dproj=E:\UnivProject\DirtyTester\DirtyMaker.dproj</Transaction>
     <Transaction>1899-12-30 00:00:00.000.923,=D:\내 작업들\SSDTools\Incubator\DirtyMaker\uTrimThread.pas</Transaction>
     <Transaction>1899-12-30 00:00:00.000.898,=D:\내 작업들\SSDTools\Incubator\DirtyMaker\uAutoTrimThread.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.387,E:\UnivProject\DirtyTester\trunk\Classes\Setting.Getter.pas=E:\UnivProject\DirtyTester\trunk\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.287,E:\UnivProject\DirtyTester\trunk\Classes\Tester.pas=</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.403,D:\내 작업들\SSDTools\Incubator\DirtyMaker\Extern\hash.pas=</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.756,D:\내 작업들\SSDTools\Incubator\DirtyMaker\uTrimThread.pas=</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.828,E:\UnivProject\DirtyTester\trunk\Classes\Setting.pas=E:\UnivProject\DirtyTester\trunk\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.903,D:\내 작업들\SSDTools\Incubator\DirtyMaker\uAutoTrimThread.pas=</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.223,=E:\UnivProject\DirtyTester\trunk\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.404,D:\내 작업들\SSDTools\Incubator\DirtyMaker\Extern\sha1.pas=</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.148,=E:\UnivProject\DirtyTester\trunk\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.862,=E:\UnivProject\DirtyTester\trunk\Unit1.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.405,E:\UnivProject\DirtyTester\trunk\uMain.dfm=E:\UnivProject\DirtyTester\trunk\Forms.Main.dfm</Transaction>
     <Transaction>1899-12-30 00:00:00.000.506,=E:\UnivProject\DirtyTester\trunk\Modules\uDatasizeUnit.pas</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.728,E:\UnivProject\DirtyTester\trunk\Unit1.dfm=E:\UnivProject\DirtyTester\trunk\Forms.Main.dfm</Transaction>
+    <Transaction>1899-12-30 00:00:00.000.092,E:\UnivProject\DirtyTester\trunk\Unit1.dfm=E:\UnivProject\DirtyTester\trunk\Forms.Setting.dfm</Transaction>
   </Transactions>
 </BorlandProject>

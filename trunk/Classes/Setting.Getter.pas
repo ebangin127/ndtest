@@ -27,6 +27,7 @@ begin
   case fSetting.cUnitSpeed.ItemIndex of
   0: result := TUnitSpeed.ZeroPointOnePercent;
   1: result := TUnitSpeed.OnePercent;
+  2: result := TUnitSpeed.TenPercent;
   else
     raise EArgumentException.Create('Wrong ItemIndex at cUnitSpeed: ' +
       IntToStr(fSetting.cSelection.ItemIndex));
@@ -39,6 +40,9 @@ begin
     exit;
 
   result.IsSet := fSetting.IsSet;
+  if not result.IsSet then
+    exit;
+
   result.DrivePath := fSetting.eDrive.Text + '\';
   result.ToLeft := StrToInt(fSetting.eLeft.Text);
   result.ToLeftUnit := GetToLeftUnit;

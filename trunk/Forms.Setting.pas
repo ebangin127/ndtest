@@ -1,4 +1,4 @@
-unit Forms.Setting;
+Ôªøunit Forms.Setting;
 
 interface
 
@@ -25,21 +25,33 @@ type
     sdText: TSaveDialog;
     cDelete: TCheckBox;
     cDetailedRecord: TCheckBox;
+    cLogNeeded: TCheckBox;
+    eLogPath: TEdit;
+    eDetailedLogPath: TEdit;
+    bLogPath: TButton;
+    bDetailedLogPath: TButton;
     procedure FormCreate(Sender: TObject);
     procedure eDriveChange(Sender: TObject);
     procedure bStartClick(Sender: TObject);
     procedure eLeftKeyPress(Sender: TObject; var Key: Char);
+    procedure bLogNeededClick(Sender: TObject);
+    procedure bDetailedRecordClick(Sender: TObject);
+    procedure cDetailedRecordMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure cLogNeededMouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
+    procedure cLogNeededKeyUp(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
+    procedure cDetailedRecordKeyUp(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
   private
     FIsSet: Boolean;
     FRecordPath: String;
     FDetailedRecordPath: String;
     function AllOptionsSet: Boolean;
     function LeftSet: Boolean;
-    procedure SetRecordPathAsSelectedFile;
     procedure FixSize;
     procedure GetFixedDrives;
-    procedure GetRecordPath;
-    procedure GetDetailedRecordPath;
     function GetTextPath: String;
   public
     property IsSet: Boolean read FIsSet;
@@ -63,12 +75,6 @@ begin
     (TryStrToInt(eLeft.Text, ToLeave));
 end;
 
-procedure TfSetting.SetRecordPathAsSelectedFile;
-begin
-  GetRecordPath;
-  GetDetailedRecordPath;
-end;
-
 procedure TfSetting.FixSize;
 begin
   Constraints.MaxHeight := Height;
@@ -88,21 +94,6 @@ begin
     eDrive.Items.Add(Drives.Letters[CurrDrv]);
   eDrive.ItemIndex := 0;
   eDriveChange(eDrive);
-end;
-
-procedure TfSetting.GetRecordPath;
-begin
-  sdText.Title := '∑Œ±◊ ¿˙¿Â ¿ßƒ°';
-  FRecordPath := GetTextPath;
-end;
-
-procedure TfSetting.GetDetailedRecordPath;
-begin
-  if (FRecordPath <> '') and (cDetailedRecord.Checked) then
-  begin
-    sdText.Title := 'ªÛºº ∑Œ±◊ ¿˙¿Â ¿ßƒ°';
-    FDetailedRecordPath := GetTextPath;
-  end;
 end;
 
 function TfSetting.GetTextPath: String;
@@ -129,10 +120,61 @@ procedure TfSetting.bStartClick(Sender: TObject);
 begin
   FIsSet := AllOptionsSet;
   if IsSet then
-  begin
-    SetRecordPathAsSelectedFile;
     Close;
-  end;
+end;
+
+procedure TfSetting.cDetailedRecordKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  cDetailedRecordMouseUp(Sender, TMouseButton.mbLeft, Shift, 0, 0);
+end;
+
+procedure TfSetting.cDetailedRecordMouseUp(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+begin
+  if cDetailedRecord.Checked = false then
+  begin
+    cDetailedRecord.Checked := false;
+    eDetailedLogPath.Text := '';
+  end
+  else
+    bDetailedRecordClick(Sender);
+end;
+
+procedure TfSetting.cLogNeededKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  cLogNeededMouseUp(Sender, TMouseButton.mbLeft, Shift, 0, 0);
+end;
+
+procedure TfSetting.cLogNeededMouseUp(Sender: TObject; Button: TMouseButton;
+  Shift: TShiftState; X, Y: Integer);
+begin
+  if cLogNeeded.Checked = false then
+  begin
+    cLogNeeded.Checked := false;
+    eLogPath.Text := '';
+  end
+  else
+    bLogNeededClick(Sender);
+end;
+
+procedure TfSetting.bDetailedRecordClick(Sender: TObject);
+begin
+  sdText.Title := 'ÏÉÅÏÑ∏ Î°úÍ∑∏ Ï†ÄÏû• ÏúÑÏπò';
+  eDetailedLogPath.Text := GetTextPath;
+  FDetailedRecordPath := eDetailedLogPath.Text;
+  if cDetailedRecord.Checked <> (eDetailedLogPath.Text <> '') then
+    cDetailedRecord.Checked := eDetailedLogPath.Text <> '';
+end;
+
+procedure TfSetting.bLogNeededClick(Sender: TObject);
+begin
+  sdText.Title := 'Î°úÍ∑∏ Ï†ÄÏû• ÏúÑÏπò';
+  eLogPath.Text := GetTextPath;
+  FRecordPath := eLogPath.Text;
+  if cLogNeeded.Checked <> (eLogPath.Text <> '') then
+    cLogNeeded.Checked := eLogPath.Text <> '';
 end;
 
 procedure TfSetting.eDriveChange(Sender: TObject);
@@ -148,7 +190,7 @@ end;
 
 procedure TfSetting.eLeftKeyPress(Sender: TObject; var Key: Char);
 begin
-  if not CharInSet(Key, ['0'..'9']) then Key := #0;
+  if not CharInSet(Key, [#8, '0'..'9']) then Key := #0;
 end;
 
 procedure TfSetting.FormCreate(Sender: TObject);
